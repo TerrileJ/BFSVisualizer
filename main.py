@@ -23,8 +23,36 @@ class Node:
     def get_color(self):
         return self.color
 
+    def get_position(self):
+        return (self.x, self.y)
+
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, ( self.x, self.y, self.width, self.width) )
+
+    def get_neighbors(self):
+        neighbors = []
+
+        # find left neighbor if one exists
+        if(self.x > NODE_WIDTH):
+            left = ( (self.x - NODE_WIDTH) // NODE_WIDTH, self.y // NODE_WIDTH)
+            neighbors.append(left)
+
+        # find right neighbor if one exists
+        if(self.x < WIDTH - NODE_WIDTH):
+            right = ( (self.x + NODE_WIDTH) // NODE_WIDTH, self.y // NODE_WIDTH)
+            neighbors.append(right)
+
+        # find top neighbor if one exists
+        if(self.y > NODE_WIDTH):
+            top = ( self.x // NODE_WIDTH, (self.y - NODE_WIDTH) // NODE_WIDTH)
+            neighbors.append(top)
+
+        # find bottom neighbor if one exists
+        if (self.y < (WIDTH - NODE_WIDTH)):
+            bottom = (self.x // NODE_WIDTH, (self.y + NODE_WIDTH) // NODE_WIDTH)
+            neighbors.append(bottom)
+
+        return neighbors
 
 # creates 2-d list of Nodes
 def make_grid(widthNode):
@@ -95,8 +123,9 @@ def main(screen):
                 elif not (end):
                     if node.get_color() != GREEN:
                         node.set_color(RED)
-                        end= True
+                        end = True
 
+            # empties grid and node designation upon right click
             if pygame.mouse.get_pressed()[2]:
                 reset(grid)
                 start, end = False, False
