@@ -55,28 +55,6 @@ def draw_grid(screen, grid):
     draw_lines(screen, grid, NODE_WIDTH)
     pygame.display.update()
 
-# assigns start and end nodes
-def designate_nodes(grid, counter):
-    pos = pygame.mouse.get_pos()
-    row = pos[1] // NODE_WIDTH
-    col = pos[0] // NODE_WIDTH
-    node = grid[row][col]
-
-    # checks if square is available
-    if node.get_color() != WHITE:
-        return False
-
-    # sets color according to mouse click, first mouse click = start node = green, etc
-    color = BLACK
-    if counter == 1:
-        color = GREEN
-    elif counter == 2:
-        color = RED
-
-    grid[row][col].set_color(color)
-
-    return True
-
 # runs entire game and visualization
 def main(screen):
     startNode = False
@@ -91,6 +69,7 @@ def main(screen):
             if event.type == pygame.QUIT:
                 run = False
 
+            # handles designation of start/end/barrier nodes
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 row = pos[1] // NODE_WIDTH
