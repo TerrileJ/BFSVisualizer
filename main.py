@@ -70,22 +70,26 @@ def main(screen):
                 run = False
 
             # handles designation of start/end/barrier nodes
-            if pygame.mouse.get_pressed()[0]:
+            if pygame.mouse.get_pressed()[0] and startNode and endNode:
                 pos = pygame.mouse.get_pos()
                 row = pos[1] // NODE_WIDTH
                 col = pos[0] // NODE_WIDTH
                 node = grid[row][col]
-                if not(startNode):
+
+                if node.get_color() != GREEN and node.get_color() != RED:
+                    node.set_color(BLACK)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                row = pos[1] // NODE_WIDTH
+                col = pos[0] // NODE_WIDTH
+                node = grid[row][col]
+                if not (startNode):
                     node.set_color(GREEN)
                     startNode = True
-                elif not(endNode):
+                elif not (endNode):
                     if node.get_color() != GREEN:
                         node.set_color(RED)
                         endNode = True
-                else:
-                    if node.get_color() != GREEN and node.get_color() != RED:
-                        node.set_color(BLACK)
-
 
     pygame.quit()
 
