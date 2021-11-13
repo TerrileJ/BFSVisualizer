@@ -8,6 +8,7 @@ NODE_WIDTH = 15
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 GREEN = (37, 235, 89)
+RED = (229, 41, 41)
 
 class Node:
     def __init__(self, x, y, width):
@@ -54,9 +55,31 @@ def draw_grid(screen, grid):
     draw_lines(screen, grid, NODE_WIDTH)
     pygame.display.update()
 
+# assigns start and end nodes
+def designate_nodes(grid, counter):
+    pos = pygame.mouse.get_pos()
+    row = pos[1] // NODE_WIDTH
+    col = pos[0] // NODE_WIDTH
+    node = grid[row][col]
+
+    # checks if square is available
+    if node.get_color() != WHITE:
+        return False
+
+    # sets color according to mouse click, first mouse click = start node = green, etc
+    color = BLACK
+    if counter == 1:
+        color = GREEN
+    elif counter == 2:
+        color = RED
+
+    grid[row][col].set_color(color)
+
+    return True
 
 # runs entire game and visualization
 def main(screen):
+    click_counter = 1
     grid = make_grid(NODE_WIDTH)
     run = True
 
@@ -67,10 +90,8 @@ def main(screen):
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row = pos[1] // NODE_WIDTH
-                col = pos[0] // NODE_WIDTH
-                grid[row][col].set_color(GREEN)
+                if designate_nodes(grid, click_counter):
+                    click_counter += 1
     pygame.quit()
 
 # setup pygame and screen
