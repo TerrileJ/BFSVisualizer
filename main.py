@@ -79,19 +79,35 @@ def designate_nodes(grid, counter):
 
 # runs entire game and visualization
 def main(screen):
-    click_counter = 1
+    startNode = False
+    endNode = False
     grid = make_grid(NODE_WIDTH)
     run = True
 
     while run:
+        draw = True
         draw_grid(screen, grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if designate_nodes(grid, click_counter):
-                    click_counter += 1
+            if pygame.mouse.get_pressed()[0]:
+                pos = pygame.mouse.get_pos()
+                row = pos[1] // NODE_WIDTH
+                col = pos[0] // NODE_WIDTH
+                node = grid[row][col]
+                if not(startNode):
+                    node.set_color(GREEN)
+                    startNode = True
+                elif not(endNode):
+                    if node.get_color() != GREEN:
+                        node.set_color(RED)
+                        endNode = True
+                else:
+                    if node.get_color() != GREEN and node.get_color() != RED:
+                        node.set_color(BLACK)
+
+
     pygame.quit()
 
 # setup pygame and screen
