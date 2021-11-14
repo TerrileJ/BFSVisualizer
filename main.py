@@ -1,4 +1,5 @@
 import pygame
+from queue import Queue
 
 # width of screen
 WIDTH = 600
@@ -9,6 +10,10 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 GREEN = (37, 235, 89)
 RED = (229, 41, 41)
+TURQUOISE = (64,224,208)
+VIOLET = (148,0,211)
+PINK = (255,192,203)
+GOLD = (255,215,0)
 
 class Node:
     def __init__(self, x, y, width):
@@ -16,6 +21,8 @@ class Node:
         self.x = x
         self.y = y
         self.width = width
+        self.prev = None
+        self.neighbors = None
 
     def set_color(self, color):
         self.color = color
@@ -26,33 +33,40 @@ class Node:
     def get_position(self):
         return (self.x, self.y)
 
+    def set_prev(self, node):
+        self.prev = node
+
+    def get_prev(self):
+        return self.prev
+
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, ( self.x, self.y, self.width, self.width) )
 
-    def get_neighbors(self):
-        neighbors = []
+    def update_neighbors(self):
+        self.neighbors = []
 
         # find left neighbor if one exists
         if(self.x > NODE_WIDTH):
-            left = ( (self.x - NODE_WIDTH) // NODE_WIDTH, self.y // NODE_WIDTH)
-            neighbors.append(left)
+            left = ( (self.x - NODE_WIDTH) , self.y)
+            self.neighbors.append(left)
 
         # find right neighbor if one exists
         if(self.x < WIDTH - NODE_WIDTH):
-            right = ( (self.x + NODE_WIDTH) // NODE_WIDTH, self.y // NODE_WIDTH)
-            neighbors.append(right)
+            right = ( (self.x + NODE_WIDTH) , self.y )
+            self.neighbors.append(right)
 
         # find top neighbor if one exists
         if(self.y > NODE_WIDTH):
-            top = ( self.x // NODE_WIDTH, (self.y - NODE_WIDTH) // NODE_WIDTH)
-            neighbors.append(top)
+            top = ( self.x, (self.y - NODE_WIDTH))
+            self.neighbors.append(top)
 
         # find bottom neighbor if one exists
         if (self.y < (WIDTH - NODE_WIDTH)):
-            bottom = (self.x // NODE_WIDTH, (self.y + NODE_WIDTH) // NODE_WIDTH)
-            neighbors.append(bottom)
+            bottom = (self.x , (self.y + NODE_WIDTH))
+            self.neighbors.append(bottom)
 
-        return neighbors
+    def get_neighbors(self):
+        return self.neighbors
 
 # creates 2-d list of Nodes
 def make_grid(widthNode):
@@ -95,8 +109,40 @@ def get_node(grid, pos):
 
     return grid[row][col]
 
-def BFS(startNode, endNode):
-    pass
+# Runs BFS visualization
+def BFS(startNode, endNode, grid, screen):
+    queue = Queue()
+    queue.put(startNode)
+    path = {startNode: startNode}
+    while not queue.empty():
+        node = queue.get()
+
+        node.set_color(TURQUOISE)
+
+        neighbors = node.get_neighbors()
+        for neighbors_pos in neighbors:
+            neighbor = get_node(grid, neighbors_pos)
+
+            if(neighbor == endNode):
+                path[neighbor] = node
+                curr = node
+                while curr != startNode:
+                    draw_grid(screen, grid)
+                    curr.set_color(GOLD)
+                    curr = path.get(curr)
+
+                return True
+
+            if(neighbor.get_color() == WHITE):
+                path[neighbor] = node
+                queue.put(neighbor)
+                neighbor.set_color(PINK)
+
+        draw_grid(screen,grid)
+        node.set_color(VIOLET)
+        startNode.set_color(GREEN)
+    return False;
+
 
 # runs entire game and visualization
 def main(screen):
@@ -140,7 +186,10 @@ def main(screen):
 
             # checks if spacebar has been hit validly to start algorithm
             if pygame.key.get_pressed()[pygame.K_SPACE] and (start and end):
-                BFS(startNode, endNode)
+                for i in range(len(grid)):
+                    for j in range(len(grid[i])):
+                        grid[i][j].update_neighbors()
+                BFS(startNode, endNode, grid, screen)
 
     pygame.quit()
 
