@@ -88,6 +88,16 @@ def reset(grid):
         for j in range(len(grid[i])):
             grid[i][j].set_color(WHITE)
 
+# Given a (x,y) coordinate, return the node at that position
+def get_node(grid, pos):
+    row = pos[1] // NODE_WIDTH
+    col = pos[0] // NODE_WIDTH
+
+    return grid[row][col]
+
+def BFS(startNode, endNode):
+    pass
+
 # runs entire game and visualization
 def main(screen):
     start, end = False, False
@@ -106,24 +116,22 @@ def main(screen):
             # handles designation of start/end/barrier nodes
             if pygame.mouse.get_pressed()[0] and start and end:
                 pos = pygame.mouse.get_pos()
-                row = pos[1] // NODE_WIDTH
-                col = pos[0] // NODE_WIDTH
-                node = grid[row][col]
+                node = get_node(grid, pos)
 
                 if node.get_color() != GREEN and node.get_color() != RED:
                     node.set_color(BLACK)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                row = pos[1] // NODE_WIDTH
-                col = pos[0] // NODE_WIDTH
-                node = grid[row][col]
+                node = get_node(grid, pos)
                 if not (start):
                     node.set_color(GREEN)
                     start = True
+                    startNode = node
                 elif not (end):
                     if node.get_color() != GREEN:
                         node.set_color(RED)
                         end = True
+                        endNode = node
 
             # empties grid and node designation upon right click
             if pygame.mouse.get_pressed()[2]:
@@ -132,7 +140,7 @@ def main(screen):
 
             # checks if spacebar has been hit validly to start algorithm
             if pygame.key.get_pressed()[pygame.K_SPACE] and (start and end):
-                BFS(start, endNode)
+                BFS(startNode, endNode)
 
     pygame.quit()
 
