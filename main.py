@@ -46,7 +46,7 @@ class Node:
         self.neighbors = []
 
         # find left neighbor if one exists
-        if(self.x > NODE_WIDTH):
+        if(self.x >= NODE_WIDTH):
             left = ( (self.x - NODE_WIDTH) , self.y)
             self.neighbors.append(left)
 
@@ -56,7 +56,7 @@ class Node:
             self.neighbors.append(right)
 
         # find top neighbor if one exists
-        if(self.y > NODE_WIDTH):
+        if(self.y >= NODE_WIDTH):
             top = ( self.x, (self.y - NODE_WIDTH))
             self.neighbors.append(top)
 
