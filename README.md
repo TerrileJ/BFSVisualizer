@@ -11,5 +11,6 @@ A small pygame visualization for common pathfinding algorithm Breadth-First Sear
 3) Afterwards, left click and drag mouse to create barriers (black) 
 4) As long as start and end nodes are designated: 
   - SPACEBAR - runs BFS 
-
+  - 'd' - runs DFS 
+  
 Right click to reset all designations. 
