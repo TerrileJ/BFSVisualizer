@@ -143,7 +143,40 @@ def BFS(startNode, endNode, grid, screen):
         startNode.set_color(GREEN)
     return False;
 
+# Runs DFS visualization
+def DFS(startNode, endNode, grid, screen):
+    DFSstack = []
+    DFSstack.append(startNode)
+    path = {startNode: startNode}
 
+    while len(DFSstack) != 0:
+        node = DFSstack.pop()
+        node.set_color(TURQUOISE)
+
+        neighbors = node.get_neighbors()
+        for neighbor_pos in neighbors:
+            neighbor = get_node(grid,neighbor_pos)
+
+            if neighbor == endNode:
+                path[neighbor] = node
+                curr = node
+                while curr != startNode:
+                    draw_grid(screen, grid)
+                    curr.set_color(GOLD)
+                    curr = path.get(curr)
+                return True
+
+            if neighbor.get_color() == WHITE:
+                path[neighbor] = node
+                DFSstack.append(neighbor)
+                neighbor.set_color(PINK)
+
+        draw_grid(screen, grid)
+        node.set_color(VIOLET)
+        if node == startNode:
+            node.set_color(GREEN)
+
+    return False
 # runs entire game and visualization
 def main(screen):
     start, end = False, False
@@ -184,13 +217,17 @@ def main(screen):
                 reset(grid)
                 start, end = False, False
 
-            # checks if spacebar has been hit validly to start algorithm
+            # checks if "spacebar" / "d" has been hit validly to start corresponding algorithm
             if pygame.key.get_pressed()[pygame.K_SPACE] and (start and end):
                 for i in range(len(grid)):
                     for j in range(len(grid[i])):
                         grid[i][j].update_neighbors()
                 BFS(startNode, endNode, grid, screen)
-
+            elif pygame.key.get_pressed()[pygame.K_d] and (start and end):
+                for i in range(len(grid)):
+                    for j in range(len(grid[i])):
+                        grid[i][j].update_neighbors()
+                DFS(startNode, endNode, grid, screen)
     pygame.quit()
 
 # setup pygame and screen
