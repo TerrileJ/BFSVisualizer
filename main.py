@@ -232,7 +232,7 @@ def main(screen):
 
 # setup pygame and screen
 pygame.init()
-pygame.display.set_caption("Breadth First Search Visualizer")
+pygame.display.set_caption("Breadth / Depth First Search Visualizer")
 screen = pygame.display.set_mode((WIDTH, WIDTH))
 
 main(screen)
