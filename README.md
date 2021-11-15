@@ -1,4 +1,4 @@
-# BFS Visualizer 
+# BFS/DFS Visualizer 
 A small pygame visualization for common pathfinding algorithm Breadth-First Search 
 
 # Requirements 
