@@ -14,3 +14,7 @@ A small pygame visualization for common pathfinding algorithm Breadth-First Sear
   - 'd' - runs DFS 
   
 Right click to reset all designations. 
+
+
+https://user-images.githubusercontent.com/48870464/150627245-0f34987e-a0ae-4b5f-a318-4b3c8e0f6ced.mp4
+
